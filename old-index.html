@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateWay School Complex - Basic School Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Root Variables for Colors */
+        :root {
+            --primary-color: #FFD700;
+            /* Gold/Yellow */
+            --secondary-color: #004AAD;
+            /* Strong Blue */
+            --accent-color: #FF8C00;
+            /* Dark Orange for subtle accents */
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --background-light: #f9f9f9;
+            --background-dark: #02264b;
+            /* Dark blue-grey for footer */
+            --border-color: #e0e0e0;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.2);
+            --translucent-blue: rgba(0, 75, 173, 0.925);
+            /* For scrolled header */
+        }
+
+        /* General Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Ensures footer sticks to bottom */
+            overflow-x: hidden;
+            /* Prevent horizontal scroll due to animations */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: transparent;
+            padding: 15px 0;
+            position: absolute;
+            /* Position over the hero section */
+            top: 0;
+            left: 0;
+            width: 100%;
+
+            z-index: 1000;
+            transition: background-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .header.scrolled {
+            background-color: var(--translucent-blue);
+            /* Translucent when scrolled */
+            position: fixed;
+            /* Fix header on scroll */
+            box-shadow: 0 2px 10px var(--shadow-medium);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.8em;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .logo a:hover {
+            color: var(--text-light);
+        }
+
+        .nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-list li {
+            margin-left: 30px;
+        }
+
+        .nav-list a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-list a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-list a:hover::after,
+        .nav-list a.active::after {
+            width: 100%;
+        }
+
+        .nav-list a:hover,
+        .nav-list a.active {
+            color: var(--primary-color);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1001;
+            /* Ensure it's above the nav */
+        }
+
+        .menu-toggle .fas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            color: var(--text-light);
+            /* Ensure icon color is light */
+        }
+
+        .menu-toggle .fa-bars {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        .menu-toggle .fa-times {
+            /* New class for 'X' icon */
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+
+        .menu-toggle.active .fa-bars {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+
+        .menu-toggle.active .fa-times {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--secondary-color);
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            top: 100%;
+            /* Position immediately below the main nav item */
+            left: 0;
+            animation: fadeIn 0.3s ease-out;
+            /* Simple fade in for dropdown */
+        }
+
+        .dropdown-content a {
+            color: var(--text-light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            font-weight: 400;
+            font-size: 1em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Show dropdown on hover for desktop */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Caret icon styling */
+        .dropbtn .fa-caret-down {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover .dropbtn .fa-caret-down {
+            transform: rotate(180deg);
+        }
+
+        /* Main Content Area */
+        main {
+            flex: 1;
+            /* Allows main content to grow and push footer down */
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(1, 27, 61, 0.6), rgba(1, 27, 61, 0.6)), url('./img/hero.jpg') no-repeat center center/cover;
+            background-size: cover;
+            color: var(--text-light);
+            text-align: center;
+            padding: 150px 20px 100px;
+            /* Increased top padding to accommodate absolute header */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            /* Make it taller to show more background */
+            position: relative;
+            /* Needed for z-index context for header */
+            z-index: 1;
+            /* Ensure hero is behind the initial header */
+            overflow: hidden;
+            /* Hide overflowing animation parts */
+        }
+
+        .hero-section h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: slideInLeft 1s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .hero-section p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            font-weight: 300;
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: slideInRight 1s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+
+        .hero-buttons .btn {
+            margin: 0 10px;
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.9s;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px var(--shadow-light);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px var(--shadow-medium);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px var(--shadow-medium);
+        }
+
+        .btn-tertiary {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border: 2px solid var(--secondary-color);
+            font-size: 0.9em;
+            padding: 8px 18px;
+        }
+
+        .btn-tertiary:hover {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        section:nth-of-type(odd) {
+            background-color: var(--background-light);
+        }
+
+        section:nth-of-type(even) {
+            background-color: #eaf1f8;
+            /* Light blue tint */
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            font-weight: 700;
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.2s;
+            /* Stagger with section content */
+        }
+
+        .section-description {
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto 60px auto;
+            color: #555;
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.4s;
+        }
+
+        /* About Overview Section */
+        .school-types {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .school-card {
+            background-color: var(--text-light);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid var(--primary-color);
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: flipInY 1s ease-out forwards;
+        }
+
+        .school-card:nth-child(1) {
+            animation-delay: 0.6s;
+        }
+
+        .school-card:nth-child(2) {
+            animation-delay: 0.8s;
+        }
+
+
+        .school-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px var(--shadow-medium);
+        }
+
+        .school-icon {
+            font-size: 3.5em;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .school-card h3 {
+            font-size: 1.8em;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .school-card p {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        /* Features Section */
+        .features-section .feature-grid {
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            background-color: var(--text-light);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-bottom: 5px solid var(--secondary-color);
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: rotateIn 1s ease-out forwards;
+        }
+
+        .feature-item:nth-child(1) {
+            animation-delay: 0.7s;
+        }
+
+        .feature-item:nth-child(2) {
+            animation-delay: 0.9s;
+        }
+
+        .feature-item:nth-child(3) {
+            animation-delay: 1.1s;
+        }
+
+        .feature-item:nth-child(4) {
+            animation-delay: 1.3s;
+        }
+
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px var(--shadow-medium);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5em;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        /* Testimonials Section - Flip Card Styles */
+        .testimonials-section {
+            background-color: var(--primary-color);
+            padding: 80px 0;
+            text-align: center;
+            color: var(--secondary-color);
+        }
+
+        .testimonials-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 40px;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 280px;
+            /* Fixed height for consistent flip cards */
+            perspective: 1000px;
+            /* 3D effect */
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-medium);
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .flip-card:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .flip-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        .flip-card:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 12px;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            /* Safari */
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .flip-card-front {
+            background-color: var(--text-light);
+            color: var(--secondary-color);
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        .flip-card-front img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        .flip-card-front h3 {
+            margin: 0;
+            font-size: 1.4em;
+            color: var(--secondary-color);
+        }
+
+        .flip-card-front p {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .flip-card-back {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            transform: rotateY(180deg);
+            border-bottom: 5px solid var(--primary-color);
+        }
+
+        .flip-card-back p {
+            font-style: italic;
+            font-size: 1em;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* News Section */
+        .news-section {
+            background-color: var(--background-light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .news-section h2 {
+            margin-bottom: 40px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .news-card {
+            background-color: var(--text-light);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            text-align: left;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .news-card:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .news-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        .news-card:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px var(--shadow-medium);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .news-content {
+            padding: 25px;
+        }
+
+        .news-content h3 {
+            font-size: 1.5em;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .news-content p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .news-date {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .news-card .btn {
+            font-size: 0.9em;
+            padding: 8px 15px;
+            margin-top: 10px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            /* background: url(./img/excursion.jpg); */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background: linear-gradient(rgb(29, 2, 102), rgb(0, 76, 218));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            opacity: 0;
+            /* Hidden initially for animation */
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.2s;
+            /* Stagger with section content */
+        }
+
+
+
+        .cta-section h2 {
+            color: white;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            color: #d6d6d6;
+        }
+
+        .cta-section .btn-primary {
+            background-color: white;
+            color: var(--secondary-color);
+            border: none;
+            font-size: 1.1em;
+            padding: 15px 30px;
+            transition: 0.2s ease-in-out;
+        }
+
+        .cta-section .btn-primary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        /* Contact Form and Map Section */
+        .contact-section-home {
+            background-color: var(--background-light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .contact-section-home .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        .contact-form-container-home {
+            background-color: var(--text-light);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        .contact-form-container-home h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .contact-form-home .form-group {
+            margin-bottom: 25px;
+        }
+
+        .contact-form-home label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 1.05em;
+        }
+
+        .contact-form-home input[type="text"],
+        .contact-form-home input[type="email"],
+        .contact-form-home textarea {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form-home input[type="text"]:focus,
+        .contact-form-home input[type="email"]:focus,
+        .contact-form-home textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+            outline: none;
+        }
+
+        .contact-form-home textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-form-home .btn-primary {
+            width: auto;
+            margin: 0 auto;
+            display: block;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .map-container-home {
+            background-color: var(--text-light);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            border-top: 5px solid var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-container-home h3 {
+            color: var(--secondary-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .map-container-home iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px var(--shadow-medium);
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background-color: #eaf1f8;
+            /* Light blue tint */
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            cursor: pointer;
+            opacity: 0;
+            /* Hidden by default for JS animation */
+            /* Transition for hover effect */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0.1s ease;
+        }
+
+        /* Keyframes for large screens (ending in "cards on a desk" state) */
+        @keyframes slideInLeftCard {
+            from {
+                opacity: 0;
+                transform: translateX(-100px) rotateZ(0deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(-3deg) translateX(-10px);
+            }
+
+            /* Specific card position */
+        }
+
+        @keyframes slideInTopCard {
+            from {
+                opacity: 0;
+                transform: translateY(-100px) rotateZ(0deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(2deg) translateY(-5px);
+            }
+
+            /* Specific card position */
+        }
+
+        @keyframes slideInRightCard {
+            from {
+                opacity: 0;
+                transform: translateX(100px) rotateZ(0deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(-1deg) translateX(10px);
+            }
+
+            /* Specific card position */
+        }
+
+        @keyframes slideInBottomCard {
+            from {
+                opacity: 0;
+                transform: translateY(100px) rotateZ(0deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(4deg) translateY(5px) translateX(-5px);
+            }
+
+            /* Specific card position */
+        }
+
+        /* Keyframes for small screens (ending in "cards on a desk" state) */
+        @keyframes slideInTopSmallCard {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(-3deg) translateX(-10px);
+            }
+
+            /* Specific card position */
+        }
+
+        @keyframes slideInBottomSmallCard {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(2deg) translateY(-5px);
+            }
+
+            /* Specific card position */
+        }
+
+        @keyframes scaleInSmallCard {
+            from {
+                opacity: 0;
+                transform: scale(0.5) rotateZ(0deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateZ(-1deg) translateX(10px);
+            }
+
+            /* Specific card position */
+        }
+
+        /* Apply specific animations based on index and screen size when 'show' class is present */
+        @media (min-width: 769px) {
+            .gallery-item:nth-child(1).show {
+                animation: slideInLeftCard 0.8s ease-out forwards;
+                animation-delay: 0.2s;
+            }
+
+            .gallery-item:nth-child(2).show {
+                animation: slideInTopCard 0.8s ease-out forwards;
+                animation-delay: 0.4s;
+            }
+
+            .gallery-item:nth-child(3).show {
+                animation: slideInRightCard 0.8s ease-out forwards;
+                animation-delay: 0.6s;
+            }
+
+            .gallery-item:nth-child(4).show {
+                animation: slideInBottomCard 0.8s ease-out forwards;
+                animation-delay: 0.8s;
+            }
+
+            .gallery-item:nth-child(5).show {
+                animation: slideInLeftCard 0.8s ease-out forwards;
+                animation-delay: 1.0s;
+            }
+
+            /* Reusing for variety */
+            .gallery-item:nth-child(6).show {
+                animation: slideInTopCard 0.8s ease-out forwards;
+                animation-delay: 1.2s;
+            }
+
+            /* Reusing for variety */
+        }
+
+        @media (max-width: 768px) {
+            .gallery-item:nth-child(1).show {
+                animation: slideInTopSmallCard 0.8s ease-out forwards;
+                animation-delay: 0.2s;
+            }
+
+            .gallery-item:nth-child(2).show {
+                animation: slideInBottomSmallCard 0.8s ease-out forwards;
+                animation-delay: 0.4s;
+            }
+
+            .gallery-item:nth-child(3).show {
+                animation: scaleInSmallCard 0.8s ease-out forwards;
+                animation-delay: 0.6s;
+            }
+
+            .gallery-item:nth-child(4).show {
+                animation: slideInTopSmallCard 0.8s ease-out forwards;
+                animation-delay: 0.8s;
+            }
+
+            .gallery-item:nth-child(5).show {
+                animation: slideInBottomSmallCard 0.8s ease-out forwards;
+                animation-delay: 1.0s;
+            }
+
+            .gallery-item:nth-child(6).show {
+                animation: scaleInSmallCard 0.8s ease-out forwards;
+                animation-delay: 1.2s;
+            }
+        }
+
+        /* Hover effect: straighten and pop */
+        .gallery-item:hover {
+            transform: rotateZ(0deg) scale(1.08) translateY(-15px);
+            /* Bring to front, slightly larger */
+            z-index: 10;
+            /* Ensure it's on top */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            /* More pronounced shadow */
+        }
+
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 74, 173, 0.7);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay span {
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        /* Counter Section */
+        .counter-section {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .counter-item {
+            /* Removed background-color, border-radius, padding, box-shadow, border-top */
+            opacity: 0;
+            /* Hidden by default for JS animation */
+            transform: translateY(20px);
+            /* Initial state for slide-up */
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            display: flex;
+            /* Use flex to center content */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            /* Add some padding back for spacing */
+        }
+
+        .counter-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .counter-item i {
+            /* New style for icons */
+            font-size: 3em;
+            color: var(--secondary-color);
+            /* Blue color for icons */
+            margin-bottom: 15px;
+        }
+
+        .counter-item .number {
+            font-size: 3.8em;
+            /* Make numbers more visible */
+            font-weight: 700;
+            color: var(--text-dark);
+            /* Make numbers white for contrast */
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .counter-item .label {
+            font-size: 1.3em;
+            /* Make labels slightly larger */
+            font-weight: 400;
+            color: var(--text-dark);
+        }
+
+        /* Floating Icons */
+        .floating-icons-container {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            /* Ensure it's above other content */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            /* Space between icons */
+        }
+
+        .floating-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1.5em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .floating-icon:hover {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile specific styles for floating icons */
+        @media (max-width: 768px) {
+            .floating-icons-container {
+                right: 15px;
+                bottom: 15px;
+                /* Position at bottom right on small screens */
+                top: auto;
+                transform: none;
+                flex-direction: column-reverse;
+                /* Stack from bottom up */
+                gap: 10px;
+            }
+
+            .floating-icon:not(.floating-toggle-btn) {
+                display: none;
+                /* Hide all but the toggle button by default */
+                opacity: 0;
+                transform: translateY(20px);
+                /* Initial state for slide-up animation */
+                transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            }
+
+            .floating-icons-container.active .floating-icon:not(.floating-toggle-btn) {
+                display: flex;
+                /* Show when active */
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Staggered animation for mobile icons */
+            .floating-icons-container.active .floating-icon:nth-last-child(2) {
+                /* Email */
+                transition-delay: 0.1s;
+            }
+
+            .floating-icons-container.active .floating-icon:nth-last-child(3) {
+                /* Facebook */
+                transition-delay: 0.2s;
+            }
+
+            .floating-icons-container.active .floating-icon:nth-last-child(4) {
+                /* Instagram */
+                transition-delay: 0.3s;
+            }
+
+            .floating-icons-container.active .floating-icon:nth-last-child(5) {
+                /* TikTok */
+                transition-delay: 0.4s;
+            }
+
+            .floating-toggle-btn {
+                background-color: var(--primary-color);
+                /* Make toggle button stand out */
+                color: var(--secondary-color);
+                font-size: 1.8em;
+                /* Larger toggle icon */
+                width: 60px;
+                height: 60px;
+            }
+
+            .floating-toggle-btn .fas {
+                transition: transform 0.3s ease;
+            }
+
+            .floating-toggle-btn.active .fa-plus {
+                transform: rotate(45deg);
+                /* Rotate plus to become X */
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            padding: 50px 0 20px;
+            font-size: 0.95em;
+            margin-top: auto;
+            /* Pushes footer to the bottom */
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            color: #ccc;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-section.contact-info p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .footer-section.contact-info i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            font-size: 1.2em;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotateY(90deg) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotateY(0deg) scale(1);
+            }
+        }
+
+        @keyframes flipInY {
+            from {
+                opacity: 0;
+                transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: perspective(400px) rotate3d(0, 1, 0, 0deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .nav-list li {
+                margin-left: 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 2.8em;
+            }
+
+            .hero-section p {
+                font-size: 1.2em;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            .section-description {
+                margin-bottom: 40px;
+            }
+
+            .school-types {
+                gap: 30px;
+            }
+
+            .school-card {
+                max-width: 320px;
+                padding: 25px;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .testimonial-grid,
+            .news-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+
+            .contact-section-home .contact-grid {
+                grid-template-columns: 1fr;
+                /* Stack columns on smaller tablets */
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                /* Adjust for smaller screens */
+            }
+
+            .counter-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header .container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .logo {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+
+            .nav {
+                display: none;
+                /* Hide by default on mobile */
+                width: 100%;
+                flex-direction: column;
+                background-color: var(--secondary-color);
+                position: absolute;
+                /* Keep it absolute initially, fixed when scrolled */
+                top: 70px;
+                /* Adjust based on header height */
+                left: 0;
+                right: 0;
+                padding: 10px 0;
+                box-shadow: 0 5px 10px var(--shadow-medium);
+                z-index: 999;
+            }
+
+            .nav.active {
+                display: flex;
+                /* Show when active */
+            }
+
+            .menu-toggle {
+                display: block;
+                /* Show hamburger icon */
+                position: absolute;
+                right: 20px;
+                top: 20px;
+            }
+
+            .nav-list {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-list li {
+                margin: 10px 0;
+            }
+
+            /* Mobile dropdown handling */
+            .nav-list li.dropdown {
+                width: 100%;
+            }
+
+            .nav-list li.dropdown .dropbtn {
+                width: 100%;
+                text-align: center;
+                display: block;
+                padding: 10px 0;
+            }
+
+            .nav-list li.dropdown .dropdown-content {
+                position: static;
+                /* Stack vertically in mobile menu */
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: rgba(0, 74, 173, 0.9);
+                /* Slightly darker for sub-menu */
+            }
+
+            .nav-list li.dropdown .dropdown-content a {
+                padding-left: 50px;
+                /* Indent dropdown items */
+                text-align: center;
+                /* Center align dropdown items on mobile */
+            }
+
+            .nav-list li.dropdown.active .dropdown-content {
+                display: block;
+                /* Show dropdown on click for mobile */
+            }
+
+
+            .hero-section {
+                padding: 120px 20px 80px;
+                /* Adjust padding for mobile */
+                min-height: 60vh;
+            }
+
+            .hero-section h1 {
+                font-size: 2.2em;
+            }
+
+            .hero-section p {
+                font-size: 1.1em;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 80%;
+                max-width: 250px;
+                margin: 0 auto;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .section-description {
+                margin-bottom: 30px;
+            }
+
+            .school-types {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .school-card {
+                max-width: 90%;
+            }
+
+            .feature-grid,
+            .testimonial-grid,
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-section {
+                min-width: unset;
+                width: 90%;
+            }
+
+            .footer-section.contact-info p {
+                justify-content: center;
+            }
+
+            .social-links {
+                margin-top: 20px;
+            }
+
+            .contact-form-container-home,
+            .map-container-home {
+                padding: 30px;
+            }
+
+            .contact-form-container-home h3,
+            .map-container-home h3 {
+                font-size: 1.8em;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                /* Single column on mobile */
+            }
+
+            .counter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo a {
+                font-size: 1.5em;
+            }
+
+            .hero-section h1 {
+                font-size: 1.8em;
+            }
+
+            .hero-section p {
+                font-size: 1em;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            .school-icon {
+                font-size: 3em;
+            }
+
+            .school-card h3 {
+                font-size: 1.5em;
+            }
+
+            .feature-icon {
+                font-size: 2.5em;
+            }
+
+            .feature-item h3 {
+                font-size: 1.3em;
+            }
+
+            .cta-section h2 {
+                font-size: 2.2em;
+            }
+
+            .cta-section p {
+                font-size: 1.1em;
+            }
+
+            .contact-form-container-home h3,
+            .map-container-home h3 {
+                font-size: 1.6em;
+            }
+
+            .counter-item .number {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">GateWay School Complex</a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">About Us <i class="fas fa-caret-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="about.html#history">History</a>
+                            <a href="about.html#mission">Mission</a>
+                            <a href="about.html#vision">Vision</a>
+                        </div>
+                    </li>
+                    <li><a href="about.html#senior">Senior High</a></li> <!-- Link to future Senior High site -->
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Admissions <i class="fas fa-caret-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="admissions.html#ges">GES Curriculum</a>
+                            <a href="admissions.html#cambridge">Cambridge Curriculum</a>
+                            <a href="admissions.html#montessori">Model Montessori</a>
+                        </div>
+                    </li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-times"></i> <!-- 'X' icon for toggle -->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <h1>Welcome to GateWay Basic School</h1>
+                <p>Nurturing young minds from Basic 1 to 9 in Kasoa.</p>
+                <div class="hero-buttons">
+                    <a href="admissions.html" class="btn btn-primary">Apply Now</a>
+                    <a href="about.html#basic" class="btn btn-secondary">Learn More About Basic School</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-overview-section">
+            <div class="container">
+                <h2>Our Vision for Basic Education</h2>
+                <p class="section-description">At GateWay Basic School, located in Kasoa, we are dedicated to providing
+                    a strong foundation for learners from Basic 1 to 9. We aim to foster a holistic learning environment
+                    that encourages academic excellence, personal growth, and community engagement from an early age.
+                </p>
+
+                <div class="school-types">
+                    <div class="school-card">
+                        <i class="fas fa-child school-icon"></i>
+                        <h3>Basic School Program</h3>
+                        <p>Our comprehensive basic school program focuses on foundational knowledge, critical thinking,
+                            and character development for young learners in Basic 1-9.</p>
+                        <a href="about.html#basic" class="btn btn-tertiary">Discover Our Basic Program</a>
+                    </div>
+                    <div class="school-card">
+                        <i class="fas fa-user-graduate school-icon"></i>
+                        <h3>Explore Senior High</h3>
+                        <p>For those looking beyond Basic School, discover our Senior High program designed for advanced
+                            academic and career preparation.</p>
+                        <a href="about.html#senior" class="btn btn-tertiary">Visit Senior High Website</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <h2>Why Choose GateWay Basic School?</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-book-open feature-icon"></i>
+                        <h3>Foundational Excellence</h3>
+                        <p>A robust curriculum building strong academic fundamentals for young learners.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chalkboard-teacher feature-icon"></i>
+                        <h3>Engaging Educators</h3>
+                        <p>Passionate teachers dedicated to nurturing curiosity and growth in every child.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h3>Supportive Learning Community</h3>
+                        <p>A caring environment where basic school students feel safe, valued, and encouraged.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-laptop-code feature-icon"></i>
+                        <h3>Modern Learning Tools</h3>
+                        <p>Well-equipped classrooms and resources to enhance early learning experiences.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section">
+            <div class="container">
+                <h2>What Our Basic School Parents Say</h2>
+                <div class="testimonial-grid">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="https://placehold.co/100x100/FFD700/004AAD?text=A.S" alt="Ama Serwaa">
+                                <h3>Ama Serwaa</h3>
+                                <p>Parent of Basic School Student</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <p>"GateWay Basic School has transformed my child's love for learning. The personalized
+                                    attention and engaging activities are truly remarkable!"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="https://placehold.co/100x100/004AAD/FFD700?text=K.M" alt="Kofi Mensah">
+                                <h3>Kofi Mensah</h3>
+                                <p>Parent of Basic School Student</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <p>"The environment at GateWay Basic is incredibly supportive. My child feels confident
+                                    and happy, and I've seen tremendous academic progress."</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="https://placehold.co/100x100/FFD700/004AAD?text=A.B" alt="Akosua Boateng">
+                                <h3>Akosua Boateng</h3>
+                                <p>Parent of Basic School Student</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <p>"I highly recommend GateWay Basic School. The teachers go above and beyond, and the
+                                    school truly cares about each child's development."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="news-section">
+            <div class="container">
+                <h2>Latest News & Updates from Basic School</h2>
+                <div class="news-grid">
+                    <div class="news-card">
+                        <img src="./img/sportsfun.jpg"
+                            alt="Basic School Sports Day">
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> July 10, 2025</div>
+                            <h3>Basic School Sports Day Fun!</h3>
+                            <p>Our young athletes showcased incredible spirit and talent at this year's Basic School
+                                Sports Day.</p>
+                            <a href="#" class="btn btn-tertiary">Read More</a>
+                        </div>
+                    </div>
+                    <div class="news-card">
+                        <img src="./img/artexhibition.webp"
+                            alt="Basic School Art Exhibition">
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> June 25, 2025</div>
+                            <h3>Creative Minds Shine at Art Exhibition</h3>
+                            <p>Our students' artistic talents were on full display at the annual Basic School Art
+                                Exhibition.</p>
+                            <a href="#" class="btn btn-tertiary">Read More</a>
+                        </div>
+                    </div>
+                    <div class="news-card">
+                        <img src="./img/excursion.jpg"
+                            alt="Basic School Field Trip">
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> May 15, 2025</div>
+                            <h3>Exciting Field Trip to the National Museum</h3>
+                            <p>Basic 5 students enjoyed an educational and interactive field trip to the National
+                                Museum.</p>
+                            <a href="#" class="btn btn-tertiary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="container">
+                <h2>Our School in Pictures</h2>
+                <p class="section-description">A glimpse into the vibrant life and learning environment at GateWay Basic
+                    School.</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item gallery-item-1">
+                        <img src="./img/excursion.jpg"
+                            alt="Classroom Learning">
+                        <div class="gallery-overlay"><span>JHS Excursion</span></div>
+                    </div>
+                    <div class="gallery-item gallery-item-2">
+                        <img src="./img/graduation.jpg" alt="Outdoor Play">
+                        <div class="gallery-overlay"><span>Graduation</span></div>
+                    </div>
+                    <div class="gallery-item gallery-item-3">
+                        <img src="./img/school_bus.jpg" alt="Science Lab">
+                        <div class="gallery-overlay"><span>School Bus</span></div>
+                    </div>
+                    <div class="gallery-item gallery-item-4">
+                        <img src="./img/kids.jpg" alt="Art Class">
+                        <div class="gallery-overlay"><span>Graduation</span></div>
+                    </div>
+                    <div class="gallery-item gallery-item-5">
+                        <img src="./img/background.jpg"
+                            alt="Library Reading">
+                        <div class="gallery-overlay"><span>School Compound</span></div>
+                    </div>
+                    <div class="gallery-item gallery-item-6">
+                        <img src="./img/mrs_janet.jpg" alt="Sports Day">
+                        <div class="gallery-overlay"><span>Graduation</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="counter-section">
+            <div class="container">
+                <h2>Our Impact in Numbers</h2>
+                <p class="section-description">Celebrating our growth and achievements in providing quality education.
+                </p>
+                <div class="counter-grid">
+                    <div class="counter-item">
+                        <i class="fas fa-user-graduate"></i> <!-- Icon for students -->
+                        <span class="number" data-target="1250">0</span>
+                        <span class="label">Total Students</span>
+                    </div>
+                    <div class="counter-item">
+                        <i class="fas fa-chalkboard-teacher"></i> <!-- Icon for teachers -->
+                        <span class="number" data-target="85">0</span>
+                        <span class="label">Dedicated Teachers</span>
+                    </div>
+                    <div class="counter-item">
+                        <i class="fas fa-award"></i> <!-- Icon for graduated students -->
+                        <span class="number" data-target="980">0</span>
+                        <span class="label">Graduated Students</span>
+                    </div>
+                    <div class="counter-item">
+                        <i class="fas fa-calendar-alt"></i> <!-- Icon for years -->
+                        <span class="number" data-target="15">0</span>
+                        <span class="label">Years of Excellence</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container cta-container">
+                <h2>Give Your Child the Best Start at GateWay Basic School!</h2>
+                <p>Enroll today and watch them thrive in a supportive and stimulating environment.</p>
+                <a href="admissions.html" class="btn btn-primary">Start Your Basic School Application</a>
+            </div>
+        </section>
+
+        <section class="contact-section-home">
+            <div class="container">
+                <h2>Connect With Us</h2>
+                <p class="section-description">We'd love to hear from you! Send us a message or find us on the map.</p>
+                <div class="contact-grid">
+                    <div class="contact-form-container-home">
+                        <h3>Send Us a Message</h3>
+                        <form class="contact-form-home">
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Your Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="Subject of your message"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" placeholder="Your message" rows="5"
+                                    required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                    <div class="map-container-home">
+                        <h3>Find Us on the Map</h3>
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3971.258666564813!2d-0.43727520000000003!3d5.5285915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdfba8e41d51ea7%3A0x58be46c9d82b435e!2sGateway%20School%20Complex!5e0!3m2!1sen!2sgh!4v1757900541802!5m2!1sen!2sgh"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="floating-icons-container">
+        <a href="tel:+233241234567" class="floating-icon" aria-label="Call Us"><i class="fas fa-phone"></i></a>
+        <a href="mailto:info@gatewayschool.edu.gh" class="floating-icon" aria-label="Email Us"><i
+                class="fas fa-envelope"></i></a>
+        <a href="#" class="floating-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="floating-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="floating-icon" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <button class="floating-icon floating-toggle-btn" aria-label="Toggle Social Links"><i
+                class="fas fa-plus"></i></button>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>GateWay School Complex</h3>
+                    <p>Nurturing minds and building futures in Kasoa, Ghana. Providing quality education from basic to
+                        senior high school.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="admissions.html">Admissions</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Events</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact-info">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Kasoa, Central Region, Ghana</p>
+                    <p><i class="fas fa-phone"></i> +233 24 123 4567</p>
+                    <p><i class="fas fa-envelope"></i> info@gatewayschool.edu.gh</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 GateWay School Complex. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for mobile navigation toggle
+        document.getElementById('mobile-menu').addEventListener('click', function () {
+            const nav = document.querySelector('.nav');
+            const menuToggle = this; // Reference to the menu-toggle div
+            nav.classList.toggle('active');
+            menuToggle.classList.toggle('active'); // Toggle class on the toggle button itself
+        });
+
+        // JavaScript for header scroll effect
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) { // Adjust this value to when you want the header to change
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // JavaScript for dropdown toggling on mobile
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            const dropbtn = dropdown.querySelector('.dropbtn');
+            dropbtn.addEventListener('click', function (event) {
+                // Only toggle dropdowns on click for mobile (or smaller screens)
+                if (window.innerWidth <= 768) {
+                    event.preventDefault(); // Prevent default link behavior for the parent dropdown
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const animateOnScroll = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Apply 'show' class to trigger CSS animations
+                    entry.target.classList.add('show');
+
+                    // If it's a counter item, start the counting animation
+                    if (entry.target.classList.contains('counter-item')) {
+                        const numberElement = entry.target.querySelector('.number');
+                        const target = +numberElement.dataset.target; // Get target from data-target attribute
+                        let current = 0;
+                        const duration = 2000; // 2 seconds
+                        const increment = target / (duration / 10); // Calculate increment for smooth count
+
+                        const updateCount = () => {
+                            if (current < target) {
+                                current += increment;
+                                numberElement.textContent = Math.floor(current);
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                numberElement.textContent = target; // Ensure it ends on the exact target
+                            }
+                        };
+                        updateCount();
+                    }
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        };
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        // Observe elements for general fade/slide animations
+        const elementsToAnimate = document.querySelectorAll(
+            '.about-overview-section h2, .about-overview-section .section-description, ' +
+            '.school-card, .features-section h2, .features-section .feature-grid, ' +
+            '.testimonials-section h2, .testimonial-grid, .news-section h2, .news-grid, ' +
+            '.cta-section, .contact-section-home h2, .contact-section-home .section-description, ' +
+            '.contact-form-container-home, .map-container-home'
+        );
+        const generalObserver = new IntersectionObserver(animateOnScroll, observerOptions);
+        elementsToAnimate.forEach(el => generalObserver.observe(el));
+
+        // Observe gallery items with specific staggered animations
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const galleryObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Stagger animation and apply specific entrance animation based on index and screen size
+                    galleryItems.forEach((item, index) => {
+                        let animationClass = '';
+                        if (window.innerWidth > 768) { // Large screen animations
+                            const col = index % 3;
+                            if (col === 0) animationClass = 'slideInLeftCard';
+                            else if (col === 1) animationClass = 'slideInTopCard';
+                            else animationClass = 'slideInRightCard';
+                            // For subsequent rows, alternate directions
+                            if (Math.floor(index / 3) % 2 !== 0) { // Odd rows
+                                if (col === 0) animationClass = 'slideInBottomCard';
+                                else if (col === 1) animationClass = 'slideInLeftCard'; // Re-use left
+                                else animationClass = 'slideInTopCard'; // Re-use top
+                            }
+                        } else { // Small screen animations (top, bottom, scale)
+                            if (index % 3 === 0) animationClass = 'slideInTopSmallCard';
+                            else if (index % 3 === 1) animationClass = 'slideInBottomSmallCard';
+                            else animationClass = 'scaleInSmallCard';
+                        }
+
+                        // Apply the animation directly via style and then remove it to allow hover
+                        setTimeout(() => {
+                            item.style.animation = `${animationClass} 0.8s ease-out forwards`;
+                            item.style.opacity = 1; // Ensure it stays visible after animation
+                            // After animation completes, remove animation property to allow hover transition
+                            item.addEventListener('animationend', function handler() {
+                                item.style.animation = '';
+                                item.removeEventListener('animationend', handler);
+                            });
+                        }, index * 150); // Stagger by 150ms
+                    });
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+        galleryObserver.observe(document.querySelector('.gallery-section')); // Observe the whole section
+
+        // Observe counter items for counting animation
+        const counterItems = document.querySelectorAll('.counter-item');
+        const counterObserver = new IntersectionObserver(animateOnScroll, observerOptions);
+        counterItems.forEach(el => counterObserver.observe(el));
+
+        // Floating icons toggle for mobile
+        const floatingIconsContainer = document.querySelector('.floating-icons-container');
+        const floatingToggleBtn = document.querySelector('.floating-toggle-btn');
+
+        if (floatingToggleBtn) {
+            floatingToggleBtn.addEventListener('click', () => {
+                // Only toggle on small screens
+                if (window.innerWidth <= 768) {
+                    floatingIconsContainer.classList.toggle('active');
+                    floatingToggleBtn.classList.toggle('active');
+                }
+            });
+        }
+
+        // Hide floating icons on large screens if they are in mobile state
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                floatingIconsContainer.classList.remove('active');
+                if (floatingToggleBtn) {
+                    floatingToggleBtn.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

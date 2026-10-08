@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateWay School Complex | Excellence from the Roots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBlue: '#1e3a8a',
+                        brandGold: '#ffc300',
+                        brandYellow: '#fbbf24',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'bounce-x': 'bounceX 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        bounceX: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '50%': { transform: 'translateX(10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glow-blue {
+            box-shadow: 0 0 50px -10px rgba(30, 58, 138, 0.3);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Award Scrolling Styles */
+        .award-card {
+            flex: 0 0 auto;
+            width: 280px;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 10px;
+        }
+
+        /* Facility Flip Card Styles */
+        .flip-card {
+            perspective: 1000px;
+            background-color: transparent;
+            height: 400px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .flip-card-back {
+            background-color: #1e3a8a;
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Mobile Menu Animation */
+        #mobile-menu {
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #mobile-menu.open {
+            transform: translateY(0);
+        }
+
+        /* Button Hover Fixes */
+        .btn-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-hover:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px -10px rgba(30, 58, 138, 0.4);
+        }
+
+        .btn-hover:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        #trusted-gate {
+            transition: 0.3s ease-in-out;
+        }
+
+        #trusted-gate:hover {
+            background-color: var(brandGold);
+            box-shadow: 0 5px 15px -5px rgba(255, 195, 0, 0.4);
+            color: black;
+            transform: scale(1.1);
+        }
+
+
+        #below-hero {
+            background: url(./img/top_view.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #awards img {
+            max-height: 200px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans overflow-x-hidden">
+
+    <nav class="fixed top-0 w-full z-[100] py-4 px-6 md:px-12 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="./img/logo.png" alt="Gateway Complex Logo" class="w-10 h-10">
+                <div class="flex flex-col">
+                    <span class="font-extrabold text-brandBlue leading-none tracking-tight">GATEWAY</span>
+                    <span class="text-[10px] uppercase font-bold text-brandBlue tracking-widest">School Complex</span>
+                </div>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8 font-semibold text-slate-700">
+                <a href="#about" class="hover:text-brandBlue font-bold transition-colors">About</a>
+                <a href="#awards" class="hover:text-brandBlue font-bold transition-colors">Awards</a>
+                <a href="#facilities" class="hover:text-brandBlue font-bold transition-colors">Facilities</a>
+                <a href="#experience" class="hover:text-brandBlue font-bold transition-colors">Impact</a>
+                <a href="#contact"
+                    class="hover:text-brandBlue transition-colors text-brandBlue border-b-2 border-brandGold">Admission</a>
+                <a href="https://trustedgateshs.netlify.app/" rel="noopener" target="_blank" id="trusted-gate"
+                    class="bg-brandGold text-brandBlue px-5 py-2 rounded-full text-sm font-bold">Go to
+                    Trusted Gate SHS</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="menu-toggle" class="md:hidden text-brandBlue text-2xl focus:outline-none p-2"
+                aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Animated Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-brandBlue z-[90] flex flex-col items-center justify-center text-white md:hidden">
+        <div class="space-y-8 text-center text-2xl font-bold">
+            <a href="#about" class="block hover:text-brandGold transition-colors" onclick="closeMenu()">About Us</a>
+            <a href="#awards" class="block hover:text-brandGold transition-colors" onclick="closeMenu()">Our Awards</a>
+            <a href="#facilities" class="block hover:text-brandGold transition-colors"
+                onclick="closeMenu()">Facilities</a>
+            <a href="#experience" class="block hover:text-brandGold transition-colors" onclick="closeMenu()">Success
+                Stories</a>
+            <a href="#contact" class="block bg-brandGold text-brandBlue px-8 py-3 rounded-xl"
+                onclick="closeMenu()">Enroll Now</a>
+            <a href="https://trustedgateshs.netlify.app/" rel="noopener" target="_blank" id="trusted-gate"
+                class="bg-brandGold text-brandBlue px-5 py-2 rounded-full text-sm font-bold">Go to
+                Trusted Gate SHS</a>
+        </div>
+        <button onclick="closeMenu()" class="absolute top-8 right-8 text-3xl">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <main class="pt-20">
+        <section class="relative min-h-[90vh] flex items-center px-6 md:px-12 overflow-hidden">
+            <div class="absolute top-20 right-[-10%] w-[500px] h-[500px] bg-brandYellow/10 rounded-full blur-[100px]">
+            </div>
+            <div class="absolute bottom-10 left-[-10%] w-[400px] h-[400px] bg-brandBlue/10 rounded-full blur-[100px]">
+            </div>
+            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="reveal active">
+                    <span
+                        class="inline-block px-4 py-1 bg-brandBlue/10 text-brandBlue rounded-full text-xs font-bold mb-4 uppercase tracking-widest">Creche
+                        to Basic 9</span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-brandBlue mb-6 leading-tight">
+                        Nurturing <span class="text-brandGold italic">Excellence</span> From The Roots.
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
+                        Located in the heart of Kasoa, GateWay School Complex provides a foundation of moral integrity
+                        and academic rigor.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#enroll"
+                            class="bg-brandBlue text-white px-8 py-4 rounded-xl shadow-xl shadow-blue-200 btn-hover"><i
+                                class="fas fa-paper-plane"></i> Enroll
+                            Today</a>
+                        <button
+                            class="border-2 border-brandBlue text-brandBlue px-8 py-4 rounded-xl btn-hover bg-white/50"><i
+                                class="fas fa-compass"></i> Explore
+                            Campus</button>
+                    </div>
+                </div>
+                <div class="relative reveal delay-200 active">
+                    <div id="below-hero"
+                        class="w-full aspect-square bg-brandGold/20 rounded-[2rem] rotate-3 absolute -z-10"></div>
+                    <img src="./img/excursion1.jpg" alt="GateWay Students"
+                        class="rounded-[2rem] shadow-2xl w-full object-cover animate-float">
+                    <div class="absolute -bottom-6 -left-6 glass p-6 rounded-2xl shadow-xl max-w-[200px] glow-blue">
+                        <p class="text-brandBlue font-bold text-3xl">100%</p>
+                        <p class="text-xs text-slate-500 font-semibold uppercase">BECE Pass Rate</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="awards" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-brandBlue">Our Pride & Awards</h2>
+                        <p class="text-slate-500">Global recognition for our dedication.</p>
+                    </div>
+                    <!-- Swipe Hint for Mobile -->
+                    <div class="flex items-center gap-3 text-brandGold font-bold mt-4 md:mt-0 text-sm animate-pulse">
+                        <span>Swipe to explore</span>
+                        <i class="fas fa-arrow-right animate-bounce-x"></i>
+                    </div>
+                </div>
+                <div class="flex overflow-x-auto gap-6 pb-6 hide-scrollbar snap-x">
+                    <!-- Award Cards -->
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/best-basic-school.jpg" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Best Basic School</h4>
+                        <p class="text-sm text-slate-500 mt-2">Municipal Education Excellence 2023.</p>
+                    </div>
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/award1.png" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Regional Quiz Champs</h4>
+                        <p class="text-sm text-slate-500 mt-2">Science & Math Competition winners.</p>
+                    </div>
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/award2.png" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Athletics Trophy</h4>
+                        <p class="text-sm text-slate-500 mt-2">Inter-school sports day overall winners.</p>
+                    </div>
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/award3.png" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Digital Innovation Award</h4>
+                        <p class="text-sm text-slate-500 mt-2">Best ICT Infrastructure in Central Region.</p>
+                    </div>
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/award4.png" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Best Educational Practice</h4>
+                        <p class="text-sm text-slate-500 mt-2">Outstanding teaching methodologies in the region.</p>
+                    </div>
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/award5.png" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Kwame Nkrumah Excellence Award</h4>
+                        <p class="text-sm text-slate-500 mt-2">Outstanding leadership and service to the community.</p>
+                    </div>
+                    <div
+                        class="award-card bg-slate-50 p-6 rounded-3xl border border-slate-100 snap-center hover:border-brandGold transition-all">
+                        <img src="./img/awards/award6.png" alt="Award"
+                            class="rounded-2xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h4 class="font-bold text-brandBlue text-lg">Best Basic Schoold Cadet</h4>
+                        <p class="text-sm text-slate-500 mt-2">Outstanding performance in academic and extracurricular
+                            activities.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 bg-slate-50 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="reveal">
+                        <span class="text-brandGold font-bold uppercase tracking-widest text-sm">Est. Since 2004</span>
+                        <h2 class="text-4xl font-extrabold text-brandBlue mb-6 mt-2">Our Journey & History</h2>
+                        <div class="space-y-4 text-slate-600 leading-relaxed">
+                            <p>Founded in Kasoa, GateWay School Complex began with a vision to provide children in the
+                                Central Region with world-class education rooted in discipline.</p>
+                            <p>From a small nursery of ten students, we have evolved into a premier basic educational
+                                complex, producing leaders who excel both academically and morally.</p>
+                        </div>
+                        <div
+                            class="mt-8 p-6 bg-white rounded-2xl border-l-8 border-brandGold shadow-sm italic text-slate-600">
+                            "True education is the architecture of the soul and the engine of a nation's progress."
+                        </div>
+                    </div>
+                    <div class="relative reveal delay-200">
+                        <div class="bg-brandBlue/5 p-4 rounded-[2.5rem] relative">
+                            <img src="./img/mrs_janet.jpg" alt="The Founder"
+                                class="rounded-[2rem] shadow-2xl object-cover w-full aspect-[4/5]">
+                            <div class="absolute -bottom-6 right-6 bg-brandBlue text-white p-6 rounded-2xl shadow-xl">
+                                <h4 class="font-bold text-lg leading-none">The Founder</h4>
+                                <p class="text-xs text-brandGold font-semibold uppercase tracking-wider mt-1">Visionary
+                                    Leader</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="facilities" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-extrabold text-brandBlue">Our World-Class Facilities</h2>
+                    <p class="text-slate-500 mt-2">Providing the best environment for modern learning.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Facility 1: Science Lab -->
+                    <div class="flip-card reveal">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="./img/science-lab.jpg" alt="Lab" class="w-full h-full object-cover">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                                    <h3 class="text-2xl font-bold text-white">Modern Science Lab</h3>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <i class="fas fa-microscope text-brandGold text-4xl mb-4"></i>
+                                <h3 class="text-2xl font-bold mb-4">Practical Exploration</h3>
+                                <p class="text-sm text-blue-100 leading-relaxed">Our state-of-the-art laboratory is
+                                    equipped for physics, chemistry, and biology experiments starting from Basic 1 to
+                                    spark early curiosity.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Facility 2: ICT Center -->
+                    <div class="flip-card reveal delay-100">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="./img/ict-center.jpg" alt="ICT" class="w-full h-full object-cover">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                                    <h3 class="text-2xl font-bold text-white">Digital Excellence Center</h3>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <i class="fas fa-laptop-code text-brandGold text-4xl mb-4"></i>
+                                <h3 class="text-2xl font-bold mb-4">Future Ready</h3>
+                                <p class="text-sm text-blue-100 leading-relaxed">Equipped with 1-to-1 student computing
+                                    access, high-speed internet, and coding workshops to ensure digital literacy.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Facility 3: E-Library -->
+                    <div class="flip-card reveal delay-200">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="./img/ebooks.jpg" alt="Library" class="w-full h-full object-cover">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                                    <h3 class="text-2xl font-bold text-white">The Knowledge Hub</h3>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <i class="fas fa-book-open text-brandGold text-4xl mb-4"></i>
+                                <h3 class="text-2xl font-bold mb-4">E-Learning Resources</h3>
+                                <p class="text-sm text-blue-100 leading-relaxed">A hybrid library offering thousands of
+                                    physical books and digital subscriptions to global educational journals.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-24 bg-brandBlue text-white relative overflow-hidden">
+            <div
+                class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+            </div>
+            <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 text-center">
+                <h2 class="text-4xl font-extrabold mb-16">Impact in Numbers</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="p-4">
+                        <p class="text-5xl md:text-6xl font-black text-brandGold mb-2"><span class="counter"
+                                data-target="45">0</span>+</p>
+                        <p class="text-xs uppercase font-bold text-blue-200 tracking-widest">Expert Teachers</p>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-5xl md:text-6xl font-black text-brandGold mb-2"><span class="counter"
+                                data-target="20">0</span>+</p>
+                        <p class="text-xs uppercase font-bold text-blue-200 tracking-widest">Years in Service</p>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-5xl md:text-6xl font-black text-brandGold mb-2"><span class="counter"
+                                data-target="5000">0</span>+</p>
+                        <p class="text-xs uppercase font-bold text-blue-200 tracking-widest">Alumni Network</p>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-5xl md:text-6xl font-black text-brandGold mb-2"><span class="counter"
+                                data-target="1200">0</span>+</p>
+                        <p class="text-xs uppercase font-bold text-blue-200 tracking-widest">Current Students</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enrollment CTA -->
+        <section id="enroll" class="py-20 px-6">
+            <div class="max-w-5xl mx-auto bg-brandGold rounded-[3rem] p-12 md:p-20 text-center shadow-2xl relative">
+                <h2 class="text-4xl font-black text-brandBlue mb-6">Shape Their Future Today.</h2>
+                <p class="text-xl font-bold text-brandBlue/80 mb-10">Enrollment for the 2025/2026 Academic Year is now
+                    open. Seats
+                    are filling fast!</p>
+                <button class="bg-brandBlue text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-2xl btn-hover"><i
+                        class="fas fa-paper-plane"></i> Begin Online Application</button>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-4xl font-extrabold text-brandBlue mb-4">Get In Touch</h2>
+                    <p class="text-slate-600 mb-8">Reach out to our administrative office for any inquiries.</p>
+                    <form class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <input type="text" placeholder="Your Name"
+                                class="w-full bg-slate-50 border-0 rounded-xl px-6 py-4 focus:ring-2 focus:ring-brandBlue outline-none transition-all">
+                            <input type="email" placeholder="Email Address"
+                                class="w-full bg-slate-50 border-0 rounded-xl px-6 py-4 focus:ring-2 focus:ring-brandBlue outline-none transition-all">
+                        </div>
+                        <textarea placeholder="Your Message" rows="4"
+                            class="w-full bg-slate-50 border-0 rounded-xl px-6 py-4 focus:ring-2 focus:ring-brandBlue outline-none transition-all"></textarea>
+                        <button
+                            class="w-full bg-brandBlue text-white font-bold py-4 rounded-xl shadow-lg btn-hover">Send
+                            Message</button>
+                    </form>
+                </div>
+                <div id="map-section" class="relative h-96 z-10 grayscale hover:grayscale-0 transition duration-1000">
+                    <div class="map-frame">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3971.258666564813!2d-0.43727520000000003!3d5.5285915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdfba8e41d51ea7%3A0x58be46c9d82b435e!2sGateway%20School%20Complex!5e0!3m2!1sen!2sgh!4v1757900541802!5m2!1sen!2sgh "
+                            width="100%" height="450" style="border:0; border-radius: 15px;" allowfullscreen=""
+                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center gap-2 mb-6">
+                    <img src="./img/logo.png" alt="Gateway School Logo" class="h-20 w-20">
+                    <h3 class="text-xl font-black">GATEWAY SCHOOL COMPLEX</h3>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">Nurturing greatness from the roots in the heart
+                    of the Central Region.</p>
+                <div class="flex gap-4">
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brandGold transition-all"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brandGold transition-all"><i
+                            class="fab fa-instagram"></i></a>
+                </div>
+                <br>
+                <p class="text-white text-sm leading-relaxed mb-6">Built with Precision by <a href="https://www.elpi.dev" class="font-bold hover:underline">eLPi.dev</a>.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-brandGold mb-6 uppercase text-xs tracking-widest">Links</h4>
+                <ul class="space-y-4 text-slate-400 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Early Childhood</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Primary Division</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Junior High School</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-brandGold mb-6 uppercase text-xs tracking-widest">Academics</h4>
+                <ul class="space-y-4 text-slate-400 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">E-Learning Portal</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">School Calendar</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Career Guidance</a></li>
+                </ul>
+            </div>
+            <div class="bg-white/5 p-8 rounded-3xl border border-white/10">
+                <h4 class="font-bold text-white mb-4 text-sm">Contact Portal</h4>
+                <p class="text-xs text-slate-400 mb-4"><i class="fas fa-map-marker-alt text-brandGold mr-2"></i> Kasoa
+                    CP,
+                    Central Region, Ghana</p>
+                <p class="text-xs text-slate-400 mb-4"><i class="fas fa-phone-alt text-brandGold mr-2"></i> +233 24 000
+                    0000</p>
+                <a href="mailto:info@gateway.edu.gh"
+                    class="block w-full py-3 bg-brandGold text-brandBlue text-center rounded-xl font-bold text-xs btn-hover">Email
+                    Office</a>
+            </div>
+        </div>
+        <div
+            class="text-center pt-8 border-t border-white/10 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+            © <span id="year"></span> GATEWAY SCHOOL COMPLEX. ALL RIGHTS RESERVED.
+            Powered by <a href="https://www.elpyron.com" class="text-brandGold hover:underline">eLPyron Systems</a>.
+        </div>
+    </footer>
+
+    <script>
+
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        function closeMenu() {
+            mobileMenu.classList.remove('open');
+        }
+
+        // Scroll Reveal Logic
+        function handleReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        // Counter Logic - FIXED for Mobile
+        // threshold set to 0.2 means animation starts when 20% of the section is visible
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        const startCounting = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        const inc = Math.ceil(target / 50);
+                        if (count < target) {
+                            counter.innerText = count + inc;
+                            setTimeout(updateCount, 20);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter);
+                }
+            });
+        };
+
+        // Initialize Observer with lower threshold for mobile scrolling
+        const counterObserver = new IntersectionObserver(startCounting, { threshold: 0.1 });
+        counters.forEach(counter => counterObserver.observe(counter));
+
+        // Global Init
+        window.addEventListener('scroll', handleReveal);
+        window.addEventListener('load', handleReveal);
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
